@@ -2,9 +2,10 @@ Emoji
 =====
 
 Emoji for Python.  This project was inspired by `kyokomi <https://github.com/kyokomi/emoji>`__. 
-The defult converting languages contain ``'en'``, ``'es'``, and ``'pt'``. With the help of 
+
+The default converting languages contain ``'en'``, ``'es'``, and ``'pt'``. With the help of 
 Emoji annotation files in `here <https://github.com/unicode-org/cldr/tree/release-38/common/annotations>`__,
-more languages become possible.
+more language become possible.
 
 Example
 -------
@@ -45,7 +46,7 @@ By default, the language is English (``language='en'``) but Spanish (``'es'``) a
 
 ..
 
-If you want to convert Emoji code into other languages, an according annotation file is needed. Take the indonesion as
+If you want to convert Emoji code into other languages, an according to annotation file is needed. Take the Indonesian as
 an example, download the ``id.xml`` in `here <https://github.com/unicode-org/cldr/tree/release-38/common/annotations>`__ and
 import it.
 
@@ -63,7 +64,7 @@ Installation
 
 .. code-block:: console
 
-    $ git clone https://github.com/carpedm20/emoji.git
+    $ git clone https://github.com/username/emoji.git
     $ cd emoji
     $ python setup.py install
 
@@ -73,7 +74,7 @@ Developing
 
 .. code-block:: console
 
-    $ git clone https://github.com/carpedm20/emoji.git
+    $ git clone git@github.com:username/emoji.git
     $ cd emoji
     $ pip install -e .\[dev\]
     $ nosetests
