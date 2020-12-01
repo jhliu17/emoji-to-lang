@@ -21,6 +21,7 @@ from emoji.core import get_emoji_regexp
 from emoji.core import emoji_count
 from emoji.core import emoji_lis
 from emoji.core import distinct_emoji_lis
+from emoji.core import import_from_annotation
 from emoji.unicode_codes import EMOJI_UNICODE, UNICODE_EMOJI
 from emoji.unicode_codes import EMOJI_ALIAS_UNICODE_ENGLISH, UNICODE_EMOJI_ALIAS_ENGLISH
 
@@ -28,7 +29,7 @@ from emoji.unicode_codes import EMOJI_ALIAS_UNICODE_ENGLISH, UNICODE_EMOJI_ALIAS
 
 __all__ = [
     # emoji.core
-    'emojize', 'demojize', 'get_emoji_regexp', 'emoji_count', 'emoji_lis',
+    'emojize', 'demojize', 'get_emoji_regexp', 'emoji_count', 'emoji_lis', 'import_from_annotation'
     # emoji.unicode_codes
     'EMOJI_UNICODE_ENGLISH', 'EMOJI_UNICODE_SPANISH', 'EMOJI_UNICODE_PORTUGUESE',
     'UNICODE_EMOJI_ENGLISH', 'UNICODE_EMOJI_SPANISH', 'UNICODE_EMOJI_PORTUGUESE',

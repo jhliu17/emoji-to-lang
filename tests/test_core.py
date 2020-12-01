@@ -77,3 +77,8 @@ def test_emoji_count():
     assert emoji.emoji_count("Hi, I am fine. 😁") == 1
     assert emoji.emoji_count("Hi") == 0
     assert emoji.emoji_count("Hello 🇫🇷👌") == 2
+
+
+def test_import_annotation():
+    emoji.import_from_annotation('tests/id.xml', 'id')
+    assert emoji.demojize("😁") == ":wajah gembira dengan mata bahagia:"

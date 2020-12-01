@@ -13,10 +13,13 @@ Core components for emoji.
 import re
 import sys
 
+import xml.etree.ElementTree as ET
+
 from emoji import unicode_codes
 
 
-__all__ = ['emojize', 'demojize', 'get_emoji_regexp','emoji_lis', 'distinct_emoji_lis']
+__all__ = ['emojize', 'demojize', 'get_emoji_regexp',
+           'emoji_lis', 'distinct_emoji_lis', 'import_from_annotation']
 
 
 PY2 = sys.version_info[0] == 2
@@ -24,8 +27,8 @@ PY2 = sys.version_info[0] == 2
 _EMOJI_REGEXP = None
 _DEFAULT_DELIMITER = ":"
 
-def emojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER,_DEFAULT_DELIMITER),variant=None, language='en'):
 
+def emojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER, _DEFAULT_DELIMITER), variant=None, language='en'):
     """Replace emoji names in a string with unicode codes.
 
     :param string: String contains emoji names.
@@ -45,24 +48,26 @@ def emojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER,_DEFAULT_D
         Python is fun ❤️ #red heart, not black heart
     """
     EMOJI_UNICODE = unicode_codes.EMOJI_UNICODE[language]
-    pattern = re.compile(u'(%s[a-zA-Z0-9\\+\\-_&.ô’Åéãíç()!#*]+%s)' % delimiters)
+    pattern = re.compile(
+        u'(%s[a-zA-Z0-9\\+\\-_&.ô’Åéãíç()!#*]+%s)' % delimiters)
+
     def replace(match):
-        mg = match.group(1).replace(delimiters[0], _DEFAULT_DELIMITER).replace(delimiters[1], _DEFAULT_DELIMITER)
+        mg = match.group(1).replace(delimiters[0], _DEFAULT_DELIMITER).replace(
+            delimiters[1], _DEFAULT_DELIMITER)
         if use_aliases:
             emj = unicode_codes.EMOJI_ALIAS_UNICODE.get(mg, mg)
         else:
             emj = EMOJI_UNICODE.get(mg, mg)
-        if variant==None:
+        if variant is None:
             return emj
-        elif variant=="text_type":
+        elif variant == "text_type":
             return emj+u'\uFE0E'
-        elif variant=="emoji_type":
+        elif variant == "emoji_type":
             return emj+u'\uFE0F'
     return pattern.sub(replace, string)
 
 
-def demojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER,_DEFAULT_DELIMITER), language='en'):
-
+def demojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER, _DEFAULT_DELIMITER), language='en'):
     """Replace unicode emoji in a string with emoji shortcodes. Useful for storage.
     :param string: String contains unicode characters. MUST BE UNICODE.
     :param use_aliases: (optional) Return emoji aliases.  See ``emoji.UNICODE_EMOJI_ALIAS``.
@@ -76,16 +81,16 @@ def demojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER,_DEFAULT_
         Unicode is tricky __hushed_face__
     """
     UNICODE_EMOJI = unicode_codes.UNICODE_EMOJI[language]
+
     def replace(match):
         codes_dict = unicode_codes.UNICODE_EMOJI_ALIAS if use_aliases else UNICODE_EMOJI
         val = codes_dict.get(match.group(0), match.group(0))
         return delimiters[0] + val[1:-1] + delimiters[1]
 
-    return re.sub(u'\ufe0f','',(get_emoji_regexp(language).sub(replace, string)))
+    return re.sub(u'\ufe0f', '', (get_emoji_regexp(language).sub(replace, string)))
 
 
 def get_emoji_regexp(language='en'):
-
     """Returns compiled regular expression that matches emojis defined in
     ``emoji.UNICODE_EMOJI_ALIAS``. The regular expression is only compiled once.
     """
@@ -112,17 +117,64 @@ def emoji_lis(string, language='en'):
     _entities = []
 
     for match in get_emoji_regexp(language).finditer(string):
-            _entities.append({
-                "location": match.start(),
-                "emoji": match.group()
-            })
+        _entities.append({
+            "location": match.start(),
+            "emoji": match.group()
+        })
 
     return _entities
 
 
+def _parse_xml(file_path):
+    """
+    Parse CLDR xml file.
+    Only the emoji exists in the `en` dict will be added into
+    consideration.
+
+    Args:
+        file_path (str): the file path to xml.
+    """
+    xml = ET.parse(file_path)
+    annotations = xml.find('annotations')
+
+    def check_exist(unicode):
+        res = demojize(unicode)
+        return _DEFAULT_DELIMITER in res
+
+    emoji_list = []
+    unicode_list = []
+    for an in annotations:
+        attrib = an.attrib
+        if 'type' not in attrib:
+            continue
+
+        unic = attrib.get('cp', None)
+        if unic and check_exist(unic):
+            unicode_list.append(unic)
+            emoji_list.append(
+                f'{_DEFAULT_DELIMITER}%s{_DEFAULT_DELIMITER}' % an.text.strip())
+
+    emoji_unicode = {e: u for e, u in zip(emoji_list, unicode_list)}
+    return emoji_unicode
+
+
+def import_from_annotation(file_path, lang, force_import=False):
+    if not force_import and (
+            lang in unicode_codes.EMOJI_UNICODE or
+            lang in unicode_codes.UNICODE_EMOJI):
+        raise ValueError(f"Language {lang} exists in default lib. Try to use `force_import`.")
+
+    emoji_unicode = _parse_xml(file_path)
+    unicode_emoji = {v: k for k, v in emoji_unicode.items()}
+
+    unicode_codes.EMOJI_UNICODE[lang] = emoji_unicode
+    unicode_codes.UNICODE_EMOJI[lang] = unicode_emoji
+
+
 def distinct_emoji_lis(string):
     """Resturns distinct list of emojis from the string"""
-    distinct_list = list({c for c in string if c in unicode_codes.UNICODE_EMOJI})
+    distinct_list = list(
+        {c for c in string if c in unicode_codes.UNICODE_EMOJI})
     return distinct_list
 
 

@@ -3,7 +3,7 @@ Emoji
 
 Emoji for Python.  This project was inspired by `kyokomi <https://github.com/kyokomi/emoji>`__.
 
-Emoji annotation files in `here <https://github.com/unicode-org/cldr/tree/release-38/common/annotations>`__.
+Emoji annotation files can be found `here <https://github.com/unicode-org/cldr/tree/release-38/common/annotations>`__.
 
 Example
 -------
