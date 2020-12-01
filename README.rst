@@ -5,7 +5,7 @@ Emoji for Python.  This project was inspired by `kyokomi <https://github.com/kyo
 
 The default converting languages contain ``'en'``, ``'es'``, and ``'pt'``. With the help of 
 Emoji annotation files in `here <https://github.com/unicode-org/cldr/tree/release-38/common/annotations>`__,
-more language become possible.
+more languages become possible.
 
 Example
 -------
