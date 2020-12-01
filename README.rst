@@ -1,9 +1,10 @@
 Emoji
 =====
 
-Emoji for Python.  This project was inspired by `kyokomi <https://github.com/kyokomi/emoji>`__.
-
-Emoji annotation files can be found `here <https://github.com/unicode-org/cldr/tree/release-38/common/annotations>`__.
+Emoji for Python.  This project was inspired by `kyokomi <https://github.com/kyokomi/emoji>`__. 
+The defult converting languages contain ``'en'``, ``'es'``, and ``'pt'``. With the help of 
+Emoji annotation files in `here <https://github.com/unicode-org/cldr/tree/release-38/common/annotations>`__,
+more languages become possible.
 
 Example
 -------
@@ -44,16 +45,21 @@ By default, the language is English (``language='en'``) but Spanish (``'es'``) a
 
 ..
 
+If you want to convert Emoji code into other languages, an according annotation file is needed. Take the indonesion as
+an example, download the ``id.xml`` in `here <https://github.com/unicode-org/cldr/tree/release-38/common/annotations>`__ and
+import it.
+
+.. code-block:: python
+
+    >> emoji.import_from_annotation('annotaion_xml/id.xml', lang='id')
+    >> print(emoji.demojize('Python adalah 👍', language='id'))
+    'Python adalah :jempol ke atas:'
+
+..
+
 Installation
 ------------
 
-Via pip:
-
-.. code-block:: console
-
-    $ pip install emoji --upgrade
-
-From master branch:
 
 .. code-block:: console
 
@@ -96,11 +102,3 @@ Links
 
 `Unicode list <https://emojiterra.com/pt/pontos-de-codigo/>`__
 
-
-
-Authors
--------
-
-Taehoon Kim / `@carpedm20 <http://carpedm20.github.io/about/>`__
-
-Kevin Wurster / `@geowurster <http://twitter.com/geowurster/>`__
