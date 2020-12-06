@@ -51,6 +51,6 @@ You can define the substitute format by setting `delimiters` and `sticky_charact
     $ python setup.py install
 ```
 
-## Acknowledgements
+## Acknowledgments
 
 This project is developed based on the [emoji](https://github.com/carpedm20/emoji).
