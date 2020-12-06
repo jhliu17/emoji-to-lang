@@ -1,6 +1,6 @@
 # Emoji-to-Lang
 
-**An Emoji human language translator.**
+**An Emoji Human Language Translator 😊**
 
 Emoji-to-Lang can translate emoji code in your sentence to language representations. The default converting languages contain ``'en'``, ``'es'``, and ``'pt'``. With the help of Emoji annotation files in [CLDR](https://github.com/unicode-org/cldr/tree/release-38/common/annotations), multilingual language translation services are user-friendly.
 
@@ -24,7 +24,7 @@ import it.
 
 ```
     >> emoji.import_from_annotation('annotaion_xml/id.xml', language='id')
-    100%|█████████████████████████████████████████████████████████████████████████████████| 3392/3392 [00:00<00:00, 50062.74it/s]
+    100%|████████████████████████████████████████| 3392/3392 [00:00<00:00, 50062.74it/s]
     Language `id` annotation file imported successfully.
     >> print(emoji.demojize('Python adalah 👍', language='id'))
     Python adalah :jempol_ke_atas:
