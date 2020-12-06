@@ -11843,3 +11843,9 @@ UNICODE_EMOJI = {
     'en': UNICODE_EMOJI_ENGLISH,
     'es': UNICODE_EMOJI_SPANISH,
     'pt': UNICODE_EMOJI_PORTUGUESE}
+
+DEFAULT_STICKY_CHAR = {
+    'en': "_",
+    'es': "_",
+    'pt': "_"
+}

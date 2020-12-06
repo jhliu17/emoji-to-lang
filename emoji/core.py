@@ -14,7 +14,7 @@ import re
 import sys
 
 import xml.etree.ElementTree as ET
-
+from tqdm import tqdm
 from emoji import unicode_codes
 
 
@@ -26,6 +26,7 @@ PY2 = sys.version_info[0] == 2
 
 _EMOJI_REGEXP = None
 _DEFAULT_DELIMITER = ":"
+_STICKY_CHARACTER = "_"
 
 
 def emojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER, _DEFAULT_DELIMITER), variant=None, language='en'):
@@ -67,7 +68,9 @@ def emojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER, _DEFAULT_
     return pattern.sub(replace, string)
 
 
-def demojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER, _DEFAULT_DELIMITER), language='en'):
+def demojize(string, use_aliases=False,
+             delimiters=(_DEFAULT_DELIMITER, _DEFAULT_DELIMITER),
+             sticky_character=None, language='en'):
     """Replace unicode emoji in a string with emoji shortcodes. Useful for storage.
     :param string: String contains unicode characters. MUST BE UNICODE.
     :param use_aliases: (optional) Return emoji aliases.  See ``emoji.UNICODE_EMOJI_ALIAS``.
@@ -81,10 +84,12 @@ def demojize(string, use_aliases=False, delimiters=(_DEFAULT_DELIMITER, _DEFAULT
         Unicode is tricky __hushed_face__
     """
     UNICODE_EMOJI = unicode_codes.UNICODE_EMOJI[language]
+    sticky_character = sticky_character if sticky_character else "_"
 
     def replace(match):
         codes_dict = unicode_codes.UNICODE_EMOJI_ALIAS if use_aliases else UNICODE_EMOJI
-        val = codes_dict.get(match.group(0), match.group(0))
+        val = codes_dict.get(match.group(0), match.group(0)).split(unicode_codes.DEFAULT_STICKY_CHAR[language])
+        val = sticky_character.join(val)
         return delimiters[0] + val[1:-1] + delimiters[1]
 
     return re.sub(u'\ufe0f', '', (get_emoji_regexp(language).sub(replace, string)))
@@ -125,7 +130,7 @@ def emoji_lis(string, language='en'):
     return _entities
 
 
-def _parse_xml(file_path):
+def _parse_xml(file_path, sticky_character):
     """
     Parse CLDR xml file.
     Only the emoji exists in the `en` dict will be added into
@@ -143,7 +148,7 @@ def _parse_xml(file_path):
 
     emoji_list = []
     unicode_list = []
-    for an in annotations:
+    for an in tqdm(annotations):
         attrib = an.attrib
         if 'type' not in attrib:
             continue
@@ -151,24 +156,30 @@ def _parse_xml(file_path):
         unic = attrib.get('cp', None)
         if unic and check_exist(unic):
             unicode_list.append(unic)
+            lang_repr = an.text.strip().split(" ")
             emoji_list.append(
-                f'{_DEFAULT_DELIMITER}%s{_DEFAULT_DELIMITER}' % an.text.strip())
+                f'{_DEFAULT_DELIMITER}%s{_DEFAULT_DELIMITER}' % sticky_character.join(lang_repr))
 
     emoji_unicode = {e: u for e, u in zip(emoji_list, unicode_list)}
     return emoji_unicode
 
 
-def import_from_annotation(file_path, lang, force_import=False):
+def import_from_annotation(file_path, language, force_import=False, sticky_character=_STICKY_CHARACTER):
     if not force_import and (
-            lang in unicode_codes.EMOJI_UNICODE or
-            lang in unicode_codes.UNICODE_EMOJI):
-        raise ValueError(f"Language {lang} exists in default lib. Try to use `force_import`.")
+            language in unicode_codes.EMOJI_UNICODE or
+            language in unicode_codes.UNICODE_EMOJI):
+        raise ValueError(f"Language {language} exists in default lib. Try to use `force_import`.")
 
-    emoji_unicode = _parse_xml(file_path)
+    if not isinstance(sticky_character, str):
+        raise ValueError("Sticky character must be a string.")
+
+    emoji_unicode = _parse_xml(file_path, sticky_character)
     unicode_emoji = {v: k for k, v in emoji_unicode.items()}
 
-    unicode_codes.EMOJI_UNICODE[lang] = emoji_unicode
-    unicode_codes.UNICODE_EMOJI[lang] = unicode_emoji
+    unicode_codes.EMOJI_UNICODE[language] = emoji_unicode
+    unicode_codes.UNICODE_EMOJI[language] = unicode_emoji
+    unicode_codes.DEFAULT_STICKY_CHAR[language] = sticky_character
+    print(f"Language `{language}` annotation file imported successfully.")
 
 
 def distinct_emoji_lis(string):

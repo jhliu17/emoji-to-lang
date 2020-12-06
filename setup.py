@@ -13,7 +13,7 @@ import os
 from setuptools import setup
 
 
-with open('README.rst', encoding='utf-8') as f:
+with open('README.md', encoding='utf-8') as f:
     readme_content = f.read().strip()
 
 
