@@ -30,7 +30,8 @@ Language `id` annotation file imported successfully.
 Python adalah :jempol_ke_atas:
 ```
 
-Emoji-to-Lang only translates the emoji into different language representations.
+Emoji-to-Lang only translates the emoji into different language representations without changing the remaining parts.
+
 ```
 >> print(emoji.demojize('那是真的牛啤 👍', language='id'))
 那是真的牛啤 :jempol_ke_atas:
