@@ -1,6 +1,6 @@
 # Emoji-to-Lang
 
-**An Emoji Human Language Translator 😊**
+**An Emoji Human Language Translator**
 
 Emoji-to-Lang can translate emoji code in your sentence to language representations. The default converting languages contain ``'en'``, ``'es'``, and ``'pt'``. With the help of Emoji annotation files in [CLDR](https://github.com/unicode-org/cldr/tree/release-38/common/annotations), multilingual language translation services are user-friendly.
 
