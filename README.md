@@ -33,14 +33,14 @@ Python adalah :jempol_ke_atas:
 Emoji-to-Lang only translates the emoji into different language representations without changing the remaining parts.
 
 ```
->> print(emoji.demojize('那是真的牛啤 👍', language='id'))
-那是真的牛啤 :jempol_ke_atas:
+>> print(emoji.demojize('那是真的🐂🍺', language='id'))
+那是真的:lembu::mug_bir:
 ```
 
 You can define the substitute format by setting `delimiters` and `sticky_character`.
 
 ```
->> demojize('Language is 😊', delimiters=('[', ']'), language='id', sticky_character=' ')
+>> print(demojize('Language is 😊', delimiters=('[', ']'), language='id', sticky_character=' '))
 Language is [wajah tersenyum dengan mata bahagia]
 ```
 
