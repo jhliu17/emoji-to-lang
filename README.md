@@ -1,6 +1,6 @@
 # Emoji-to-Lang
 
-**An Emoji Human Language Translator**
+**An Emoji to Human Language Translator**
 
 Emoji-to-Lang can translate emoji code in your sentence to language representations. The default converting languages contain ``'en'``, ``'es'``, and ``'pt'``. With the help of Emoji annotation files in [CLDR](https://github.com/unicode-org/cldr/tree/release-38/common/annotations), multilingual language translation services are user-friendly.
 
@@ -37,7 +37,7 @@ Emoji-to-Lang only translates the emoji into different language representations 
 那是真的:lembu::mug_bir:
 ```
 
-You can define the substitute format by setting `delimiters` and `sticky_character`.
+You can define the template format by setting `delimiters` and `sticky_character`.
 
 ```python
 >> print(demojize('Language is 😊', delimiters=('[', ']'), language='id', sticky_character=' '))
