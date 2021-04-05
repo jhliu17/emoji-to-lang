@@ -1,4 +1,4 @@
-# Emoji-to-Lang
+# Emoji to Lang
 
 **An Emoji to Human Language Translator**
 
