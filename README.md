@@ -47,8 +47,8 @@ Language is [wajah tersenyum dengan mata bahagia]
 ## Installation
 
 ```bash
-$ git clone https://github.com/jhliu17/Emoji-to-Lang.git
-$ cd Emoji-to-Lang
+$ git clone https://github.com/jhliu17/emoji-to-lang.git
+$ cd emoji-to-lang
 $ python setup.py install
 ```
 
